@@ -24,6 +24,8 @@ import net.raphimc.softwarerenderer.util.ColorMixer;
 import net.raphimc.softwarerenderer.vertex.RasterVertex;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+
 public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex v3, @Nullable ImageBuffer textureBuffer) implements Rasterizer {
 
     @Override
@@ -45,10 +47,16 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
         final int[] colorRaster = colorBuffer.raster();
         final boolean isBackFacing = this.isBackFacing();
 
-        final int minX = (int) Math.floor(Math.max(0, Math.min(Math.min(x1, x2), Math.min(x3, rasterWidth - 1))));
-        final int minY = (int) Math.floor(Math.max(0, Math.min(Math.min(y1, y2), Math.min(y3, rasterHeight - 1))));
-        final int maxX = (int) Math.ceil(Math.min(rasterWidth - 1, Math.max(Math.max(x1, x2), Math.max(x3, 0))));
-        final int maxY = (int) Math.ceil(Math.min(rasterHeight - 1, Math.max(Math.max(y1, y2), Math.max(y3, 0))));
+        int minX = (int) Math.floor(Math.max(0, Math.min(Math.min(x1, x2), Math.min(x3, rasterWidth - 1))));
+        int minY = (int) Math.floor(Math.max(0, Math.min(Math.min(y1, y2), Math.min(y3, rasterHeight - 1))));
+        int maxX = (int) Math.ceil(Math.min(rasterWidth - 1, Math.max(Math.max(x1, x2), Math.max(x3, 0))));
+        int maxY = (int) Math.ceil(Math.min(rasterHeight - 1, Math.max(Math.max(y1, y2), Math.max(y3, 0))));
+        if (clipRect != null) {
+            minX = Math.max(minX, clipRect.minX());
+            minY = Math.max(minY, clipRect.minY());
+            maxX = Math.min(maxX, clipRect.maxX());
+            maxY = Math.min(maxY, clipRect.maxY());
+        }
 
         final float dx1 = x3 - x2;
         final float dy1 = y3 - y2;
@@ -97,10 +105,6 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
 
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
-                if (clipRect != null && !clipRect.contains(x, y)) {
-                    continue;
-                }
-
                 final double bc1 = (x - x2) * dy1 - (y - y2) * dx1;
                 final double bc2 = (x - x3) * dy2 - (y - y3) * dx2;
                 final double bc3 = (x - x1) * dy3 - (y - y1) * dx3;
@@ -140,6 +144,27 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
                 }
             }
         }
+    }
+
+    @Override
+    public void drawWireframe(final Graphics graphics, @Nullable final ClipRect clipRect) {
+        final int x1 = (int) this.v1.x();
+        final int y1 = (int) this.v1.y();
+        final int x2 = (int) this.v2.x();
+        final int y2 = (int) this.v2.y();
+        final int x3 = (int) this.v3.x();
+        final int y3 = (int) this.v3.y();
+
+        graphics.setColor(new Color(this.v1.c(), true));
+        if (clipRect != null) {
+            graphics.setClip(clipRect.minX(), clipRect.minY(), clipRect.minX() + clipRect.maxX(), clipRect.minY() + clipRect.maxY());
+        } else {
+            graphics.setClip(null);
+        }
+
+        graphics.drawLine(x1, y1, x2, y2);
+        graphics.drawLine(x2, y2, x3, y3);
+        graphics.drawLine(x3, y3, x1, y1);
     }
 
     @Override

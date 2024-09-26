@@ -17,11 +17,9 @@
  */
 package net.raphimc.softwarerenderer.primitives;
 
-import net.raphimc.softwarerenderer.data.ClipRect;
 import net.raphimc.softwarerenderer.data.ImageBuffer;
-import net.raphimc.softwarerenderer.enums.CullFace;
+import net.raphimc.softwarerenderer.rasterizer.QuadRasterizer;
 import net.raphimc.softwarerenderer.rasterizer.Rasterizer;
-import net.raphimc.softwarerenderer.rasterizer.TriangleRasterizer;
 import net.raphimc.softwarerenderer.vertex.RasterVertex;
 import net.raphimc.softwarerenderer.vertex.Vertex;
 import org.jetbrains.annotations.Nullable;
@@ -35,24 +33,7 @@ public record Quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4, @Nullable ImageBu
         final RasterVertex rv2 = this.v2.project(matrix);
         final RasterVertex rv3 = this.v3.project(matrix);
         final RasterVertex rv4 = this.v4.project(matrix);
-        final TriangleRasterizer rasterizer1 = new TriangleRasterizer(rv1, rv2, rv3, this.textureBuffer);
-        final TriangleRasterizer rasterizer2 = new TriangleRasterizer(rv3, rv4, rv1, this.textureBuffer);
-        return new QuadRasterizer(rasterizer1, rasterizer2);
-    }
-
-    private record QuadRasterizer(TriangleRasterizer rasterizer1, TriangleRasterizer rasterizer2) implements Rasterizer {
-
-        @Override
-        public void rasterize(final ImageBuffer colorBuffer, final float @Nullable [] depthBuffer, final @Nullable ClipRect clipRect) {
-            this.rasterizer1.rasterize(colorBuffer, depthBuffer, clipRect);
-            this.rasterizer2.rasterize(colorBuffer, depthBuffer, clipRect);
-        }
-
-        @Override
-        public boolean canBeCulled(final CullFace cullFace) {
-            return this.rasterizer1.canBeCulled(cullFace) && this.rasterizer2.canBeCulled(cullFace);
-        }
-
+        return new QuadRasterizer(rv1, rv2, rv3, rv4, this.textureBuffer);
     }
 
 }

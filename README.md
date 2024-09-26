@@ -8,6 +8,7 @@ This project is mostly for learning purposes due to Java's slow performance.
 - Z-Buffering (Depth Testing)
 - Perspective correct texture mapping
 - Backface Culling
+- Wireframe rendering
 - Written in pure Java
 
 ## Releases

@@ -24,6 +24,7 @@ import net.raphimc.softwarerenderer.primitives.Primitive;
 import net.raphimc.softwarerenderer.rasterizer.Rasterizer;
 import org.joml.Matrix4f;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -32,16 +33,19 @@ public class SoftwareRenderer {
 
     private final BufferedImage renderTarget;
     private final ImageBuffer colorBuffer;
+    private final Graphics2D graphics;
     private final float[] depthBuffer;
     private final Matrix4f identityMatrix;
 
     private CullFace cullFace = CullFace.NONE;
     private boolean depthEnabled = false;
     private ClipRect clipRect = null;
+    private boolean wireframe = false;
 
     public SoftwareRenderer(final int width, final int height) {
         this.renderTarget = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE);
         this.colorBuffer = new ImageBuffer(this.renderTarget);
+        this.graphics = this.renderTarget.createGraphics();
         this.depthBuffer = new float[width * height];
         this.identityMatrix = new Matrix4f();
         this.clearDepthBuffer();
@@ -75,7 +79,11 @@ public class SoftwareRenderer {
         if (rasterizer.canBeCulled(this.cullFace)) {
             return false;
         }
-        rasterizer.rasterize(this.colorBuffer, this.depthEnabled ? this.depthBuffer : null, this.clipRect);
+        if (this.wireframe) {
+            rasterizer.drawWireframe(this.graphics, this.clipRect);
+        } else {
+            rasterizer.rasterize(this.colorBuffer, this.depthEnabled ? this.depthBuffer : null, this.clipRect);
+        }
         return true;
     }
 
@@ -101,6 +109,14 @@ public class SoftwareRenderer {
 
     public ClipRect getClipRect() {
         return this.clipRect;
+    }
+
+    public void setWireframe(final boolean wireframe) {
+        this.wireframe = wireframe;
+    }
+
+    public boolean isWireframe() {
+        return this.wireframe;
     }
 
     public BufferedImage getImage() {

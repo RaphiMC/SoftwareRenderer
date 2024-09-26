@@ -22,9 +22,13 @@ import net.raphimc.softwarerenderer.data.ImageBuffer;
 import net.raphimc.softwarerenderer.enums.CullFace;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+
 public interface Rasterizer {
 
     void rasterize(final ImageBuffer colorBuffer, final float @Nullable [] depthBuffer, @Nullable final ClipRect clipRect);
+
+    void drawWireframe(final Graphics graphics, @Nullable final ClipRect clipRect);
 
     boolean canBeCulled(final CullFace cullFace);
 

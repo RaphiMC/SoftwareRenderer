@@ -155,6 +155,8 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
         final int x3 = (int) this.v3.x();
         final int y3 = (int) this.v3.y();
 
+        final Color previousColor = graphics.getColor();
+        final Shape previousClip = graphics.getClip();
         graphics.setColor(new Color(this.v1.c(), true));
         if (clipRect != null) {
             graphics.setClip(clipRect.minX(), clipRect.minY(), clipRect.minX() + clipRect.maxX(), clipRect.minY() + clipRect.maxY());
@@ -165,6 +167,9 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
         graphics.drawLine(x1, y1, x2, y2);
         graphics.drawLine(x2, y2, x3, y3);
         graphics.drawLine(x3, y3, x1, y1);
+
+        graphics.setColor(previousColor);
+        graphics.setClip(previousClip);
     }
 
     @Override

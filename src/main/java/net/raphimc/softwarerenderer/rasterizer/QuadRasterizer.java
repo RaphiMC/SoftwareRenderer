@@ -48,6 +48,8 @@ public record QuadRasterizer(TriangleRasterizer tr1, TriangleRasterizer tr2, Ras
         final int x4 = (int) this.v4.x();
         final int y4 = (int) this.v4.y();
 
+        final Color previousColor = graphics.getColor();
+        final Shape previousClip = graphics.getClip();
         graphics.setColor(new Color(this.v1.c(), true));
         if (clipRect != null) {
             graphics.setClip(clipRect.minX(), clipRect.minY(), clipRect.minX() + clipRect.maxX(), clipRect.minY() + clipRect.maxY());
@@ -59,6 +61,9 @@ public record QuadRasterizer(TriangleRasterizer tr1, TriangleRasterizer tr2, Ras
         graphics.drawLine(x2, y2, x3, y3);
         graphics.drawLine(x3, y3, x4, y4);
         graphics.drawLine(x4, y4, x1, y1);
+
+        graphics.setColor(previousColor);
+        graphics.setClip(previousClip);
     }
 
     @Override

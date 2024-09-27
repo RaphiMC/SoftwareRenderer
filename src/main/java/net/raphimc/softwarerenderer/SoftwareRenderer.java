@@ -123,4 +123,8 @@ public class SoftwareRenderer {
         return this.renderTarget;
     }
 
+    public Graphics2D getGraphics2D() {
+        return this.graphics;
+    }
+
 }

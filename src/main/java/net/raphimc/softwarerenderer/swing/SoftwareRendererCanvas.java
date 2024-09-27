@@ -88,7 +88,6 @@ public abstract class SoftwareRendererCanvas<R extends SoftwareRenderer> extends
                     graphics.fillRect(0, 0, this.getWidth(), this.getHeight());
                     graphics.setColor(Color.WHITE);
                     graphics.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
-                    this.render2D(graphics);
                     graphics.dispose();
                 } while (this.bufferStrategy.contentsRestored());
                 this.bufferStrategy.show();
@@ -98,9 +97,6 @@ public abstract class SoftwareRendererCanvas<R extends SoftwareRenderer> extends
     }
 
     protected abstract void render(final R renderer);
-
-    protected void render2D(final Graphics graphics) {
-    }
 
     protected Color getClearColor() {
         return Color.BLACK;

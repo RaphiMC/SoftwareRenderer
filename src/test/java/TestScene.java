@@ -7,7 +7,6 @@ import net.raphimc.softwarerenderer.vertex.FloatVertex;
 import org.joml.Vector3f;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class TestScene extends SoftwareRendererCanvas<PerspectiveSoftwareRenderer> {
 
     private final ImageBuffer textureBuffer;
-    private int renderedQuads = 0;
 
     public TestScene() {
         super((width, height) -> new PerspectiveSoftwareRenderer(width, height, 90F));
@@ -43,19 +41,16 @@ public class TestScene extends SoftwareRendererCanvas<PerspectiveSoftwareRendere
         renderer.getModelViewMatrix().rotateX((float) Math.toRadians((System.currentTimeMillis() % 5000) / 5000F * 360));
         renderer.getModelViewMatrix().rotateZ((float) Math.toRadians((System.currentTimeMillis() % 5000) / 5000F * 360));
 
-        this.renderedQuads = renderer.draw3DPrimitives(quads);
+        final int renderedQuads = renderer.draw3DPrimitives(quads);
 
         renderer.getModelViewMatrix().popMatrix();
         renderer.setCullFace(CullFace.NONE);
         renderer.setDepthEnabled(false);
-    }
 
-    @Override
-    protected void render2D(final Graphics graphics) {
         final float fps = 1000F / this.frameTime;
-        graphics.drawString("FPS: " + fps, 10, 20);
-        graphics.drawString("Frame time: " + this.frameTime + "ms", 10, 40);
-        graphics.drawString("Quads: " + this.renderedQuads, 10, 60);
+        renderer.getGraphics2D().drawString("FPS: " + fps, 10, 20);
+        renderer.getGraphics2D().drawString("Frame time: " + this.frameTime + "ms", 10, 40);
+        renderer.getGraphics2D().drawString("Quads: " + renderedQuads, 10, 60);
     }
 
     public static void box(final List<Quad> quads, final Vector3f pos1, final Vector3f pos2, final ImageBuffer texture) {

@@ -113,7 +113,6 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
                     if (sum == 0) {
                         continue;
                     }
-                    final double pSum = (bc1 / w1) + (bc2 / w2) + (bc3 / w3);
                     final int rasterIndex = y * rasterWidth + x;
 
                     if (depthBuffer != null) {
@@ -123,6 +122,8 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
                         }
                         depthBuffer[rasterIndex] = z;
                     }
+
+                    final double pSum = (bc1 / w1) + (bc2 / w2) + (bc3 / w3);
 
                     final int a = (int) ((bc1 * a1 + bc2 * a2 + bc3 * a3) / sum);
                     final int r = (int) ((bc1 * r1 + bc2 * r2 + bc3 * r3) / sum);
@@ -140,7 +141,9 @@ public record TriangleRasterizer(RasterVertex v1, RasterVertex v2, RasterVertex 
                         color = ColorMixer.mix(color, texColor);
                     }
 
-                    colorRaster[rasterIndex] = ColorMixer.blend(colorRaster[rasterIndex], color);
+                    if ((color & 0xFF000000) != 0) {
+                        colorRaster[rasterIndex] = ColorMixer.blend(colorRaster[rasterIndex], color);
+                    }
                 }
             }
         }

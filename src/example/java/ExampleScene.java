@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestScene extends SoftwareRendererCanvas<PerspectiveSoftwareRenderer> {
+public class ExampleScene extends SoftwareRendererCanvas<PerspectiveSoftwareRenderer> {
 
     private final ImageBuffer textureBuffer;
 
-    public TestScene() {
+    public ExampleScene() {
         super((width, height) -> new PerspectiveSoftwareRenderer(width, height, 90F));
         try {
             this.textureBuffer = new ImageBuffer(ImageIO.read(this.getClass().getResourceAsStream("stone.png")));

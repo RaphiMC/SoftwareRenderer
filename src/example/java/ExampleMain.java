@@ -19,12 +19,12 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class TestMain {
+public class ExampleMain {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("SoftwareRenderer Test");
+        JFrame frame = new JFrame("SoftwareRenderer Example");
         frame.setLayout(new BorderLayout());
-        frame.add(new TestScene());
+        frame.add(new ExampleScene());
         frame.pack();
         frame.setSize(1280, 720);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

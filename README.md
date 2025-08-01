@@ -23,7 +23,7 @@ If you just want the latest jar file you can download it from [GitHub Actions](h
 SoftwareRenderer provides most of its functionality through the ``SoftwareRenderer`` and ``PerspectiveSoftwareRenderer`` class.
 
 ## Examples
-* [Simple 3D Scene](/src/test/java/TestMain.java)
+* [Simple 3D Scene](/src/example/java/ExampleMain.java)
 * [ImGui (2D)](https://github.com/Lenni0451/imgui-swing)
 
 ## Contact

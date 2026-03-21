@@ -30,4 +30,4 @@ SoftwareRenderer provides most of its functionality through the ``SoftwareRender
 If you encounter any issues, please report them on the
 [issue tracker](https://github.com/RaphiMC/SoftwareRenderer/issues).  
 If you just want to talk or need help implementing SoftwareRenderer feel free to join my
-[Discord](https://discord.gg/dCzT9XHEWu).
+[Discord](https://raphimc.net/discord).

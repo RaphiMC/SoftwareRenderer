@@ -8,5 +8,5 @@ plugins {
 dependencies {
     compileOnly "org.jetbrains:annotations:26.1.0"
 
-    api "org.joml:joml:1.10.8"
+    api "org.joml:joml:1.10.9"
 }
